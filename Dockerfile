@@ -1,10 +1,20 @@
-FROM nodesource/trusty:5.1
+FROM node:7.2.1
 
-RUN mkdir -p /home/nodejs/app
-WORKDIR /home/nodejs/app
+RUN useradd --user-group --create-home --shell /bin/false app
 
-Add package.json package.json
-COPY . /home/nodejs/app
-RUN npm install --production
+ENV HOME=/home/app
 
-CMD ["npm”, “start”]
+COPY package.json $HOME/radar/
+RUN chown -R app:app $HOME/*
+
+USER app
+WORKDIR $HOME/radar
+RUN npm install
+
+USER root
+COPY . $HOME/radar
+RUN chown -R app:app $HOME/*
+
+USER app
+
+CMD ["npm", "run","dev"]
