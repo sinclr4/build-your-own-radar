@@ -11,6 +11,9 @@ USER app
 WORKDIR $HOME/radar
 RUN npm install
 
+ENV PORT 8080
+EXPOSE  $PORT
+
 USER root
 COPY . $HOME/radar
 RUN chown -R app:app $HOME/*
